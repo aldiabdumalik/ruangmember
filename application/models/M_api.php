@@ -185,6 +185,11 @@ class M_api extends CI_Model {
 		$query = $this->db->get_where('t_pin', $where);
 		return $query->row_array();
 	}
+	function get_pin_order($where)
+	{
+		$query = $this->db->get_where('order_id', $where);
+		return $query->row_array();
+	}
 
 	function get_order_join($where)
 	{
@@ -246,6 +251,65 @@ class M_api extends CI_Model {
 			$query = $this->db->get('order_detail_consumer');
 			return $query->result_array();
 		}
+	}
+
+	function get_report($page=0, $where=null)
+	{
+		$limit = 5;
+		$offset = $page*$limit;
+		$this->db->select('order_id.*, order_detail_consumer.*');
+		$this->db->from('order_id');
+		$this->db->join('order_detail_consumer', 'order_detail_consumer.id_consumer = order_id.id_consumer', 'left');
+		$this->db->where($where);
+		$this->db->limit($limit, $offset);
+		$this->db->order_by('order_id.tgl_order', 'desc');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+	function get_report_all($where)
+	{
+		$this->db->select('order_id.*, order_detail_consumer.*');
+		$this->db->from('order_id');
+		$this->db->join('order_detail_consumer', 'order_detail_consumer.id_consumer = order_id.id_consumer', 'left');
+		$this->db->where($where);
+		$this->db->order_by('order_id.tgl_order', 'desc');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+	function search_report($text=null, $date=null, $status)
+	{
+		if ($text != null && $date != null) {
+			$where = "
+				order_id.order_status = '${status}' AND order_detail_consumer.nama_penerima LIKE '%${text}%' AND order_id.tgl_order LIKE '%${date}%'
+			";
+		}elseif ($text != null && $date == null) {
+			$where = "
+				order_id.order_status = '${status}' AND order_detail_consumer.nama_penerima LIKE '%${text}%'
+			";
+		}else{
+			$where = "
+				order_id.order_status = '${status}' AND order_id.tgl_order LIKE '%${date}%'
+			";
+		}
+		$this->db->select('order_id.*, order_detail_consumer.*');
+		$this->db->from('order_id');
+		$this->db->join('order_detail_consumer', 'order_detail_consumer.id_consumer = order_id.id_consumer', 'left');
+		$this->db->where($where);
+		$this->db->order_by('order_id.tgl_order', 'desc');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+	function get_report_detail($where)
+	{
+		$this->db->select('order_id.*, order_detail.*, t_produk.idProduk, order_detail_consumer.*, t_produk.namaProduk, t_produk.hargaProduk');
+		$this->db->from('order_id');
+		$this->db->join('order_detail_consumer', 'order_detail_consumer.id_consumer = order_id.id_consumer', 'left');
+		$this->db->join('order_detail', 'order_detail.id_order = order_id.id_order', 'left');
+		$this->db->join('t_produk', 't_produk.idProduk = order_detail.idProduk', 'left');
+		$this->db->where($where);
+		$this->db->order_by('t_produk.namaProduk', 'asc');
+		$query = $this->db->get();
+		return $query->result_array();
 	}
 }
 

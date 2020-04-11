@@ -85,6 +85,7 @@ $route['api/change-kategori.json'] = 'api/Api_transaksi/changekat';
 $route['api/change-produk.json'] = 'api/Api_transaksi/changeproduk';
 $route['api/cart.json'] = 'api/Api_transaksi/cart';
 $route['api/get-consumer.json'] = 'api/Api_transaksi/consumer';
+$route['api/orderkeun.json'] = 'api/Api_transaksi/orderkeun';
 
 $route['api/cartedit.json'] = 'api/android/cartedit';
 $route['api/cartdelete.json'] = 'api/android/cartdelete';
@@ -100,3 +101,7 @@ $route['api/get-provinsi.json'] = 'api/Api_ongkir/provinsi';
 $route['api/get-kota.json'] = 'api/Api_ongkir/kota';
 $route['api/get-kecamatan.json'] = 'api/Api_ongkir/kecamatan';
 $route['api/get-ongkir.json'] = 'api/Api_ongkir/ongkir';
+
+$route['api/get-report.json'] = 'api/Api_report/reporttbl';
+$route['api/search-report.json'] = 'api/Api_report/reporttbl2';
+$route['api/detail-report.json'] = 'api/Api_report/orderdetail';

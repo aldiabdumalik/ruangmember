@@ -14,10 +14,7 @@ class Android extends REST_Controller {
 		$this->load->library('tools');
 	}
 
-	public function index_get()
-	{
-		
-	}
+	public function index_get(){}
 
 	public function cekpin_post()
 	{
@@ -349,54 +346,54 @@ class Android extends REST_Controller {
 		}
 	}
 
-	public function order_post()
-	{
-		$consumer = [
-			'id_consumer' => date('Ymd').$this->tools->str_random(4),
-			'nama_penerima' => $this->post('order_nama_penerima'),
-			'alamat_penerima' => $this->post('order_alamat_penerima'),
-			'nowa_penerima' => $this->tools->ubah_nohp($this->post('order_nowa_penerima')),
-		];
-		$insert_consumer = $this->api->insert('order_detail_consumer', $consumer);
-		if ($insert_consumer) {
-			$result_cart = $this->api->cart_get(['id_plm' => $this->post('id_plm')]);
-			// $result_cart2 = $this->api->cart_get_total(['id_plm' => $this->post('id_plm')]);
-			$order_id = [
-				'id_order' => 'ORD'.date('Ymd').'/'.$this->post('id_plm').$this->tools->str_random(5),
-				'id_plm' => $this->post('id_plm'),
-				'id_consumer' => $consumer['id_consumer'],
-				'total_order' => $this->post('total_bayar'),
-				'tgl_order' => date('Y-m-d H:i:s') 
-			];
-			$insert_order_id = $this->api->insert('order_id', $order_id);
-			if ($insert_order_id) {
-				foreach ($result_cart as $key => $v) {
-					$order_detail[] = [
-						'id_order' => $order_id['id_order'],
-						'idProduk' => $v['idProduk'],
-						'qty_detail' => $v['qty_cart'],
-						'total_detail' => $v['total_cart']
-					];
+	// public function order_post()
+	// {
+	// 	$consumer = [
+	// 		'id_consumer' => date('Ymd').$this->tools->str_random(4),
+	// 		'nama_penerima' => $this->post('order_nama_penerima'),
+	// 		'alamat_penerima' => $this->post('order_alamat_penerima'),
+	// 		'nowa_penerima' => $this->tools->ubah_nohp($this->post('order_nowa_penerima')),
+	// 	];
+	// 	$insert_consumer = $this->api->insert('order_detail_consumer', $consumer);
+	// 	if ($insert_consumer) {
+	// 		$result_cart = $this->api->cart_get(['id_plm' => $this->post('id_plm')]);
+	// 		// $result_cart2 = $this->api->cart_get_total(['id_plm' => $this->post('id_plm')]);
+	// 		$order_id = [
+	// 			'id_order' => 'ORD'.date('Ymd').'/'.$this->post('id_plm').$this->tools->str_random(5),
+	// 			'id_plm' => $this->post('id_plm'),
+	// 			'id_consumer' => $consumer['id_consumer'],
+	// 			'total_order' => $this->post('total_bayar'),
+	// 			'tgl_order' => date('Y-m-d H:i:s') 
+	// 		];
+	// 		$insert_order_id = $this->api->insert('order_id', $order_id);
+	// 		if ($insert_order_id) {
+	// 			foreach ($result_cart as $key => $v) {
+	// 				$order_detail[] = [
+	// 					'id_order' => $order_id['id_order'],
+	// 					'idProduk' => $v['idProduk'],
+	// 					'qty_detail' => $v['qty_cart'],
+	// 					'total_detail' => $v['total_cart']
+	// 				];
 
-					$produk = $this->api->produk_byid(['idProduk' => $v['idProduk']]);
-					$this->api->update_stock(['stokProduk' => $produk['stokProduk']-$v['qty_cart']], ['idProduk' => $v['idProduk']]);
-				}
-				$insert_order_detail = $this->db->insert_batch('order_detail', $order_detail);
-				if ($insert_order_detail) {
-					$this->api->delete_new('order_cart', ['id_plm' => $this->post('id_plm')]);
-					$this->response([
-						'status' => TRUE,
-						'message' => 'Berhasil melakukan transaksi...'
-					], REST_Controller::HTTP_CREATED);
-				}else{
-					$this->response([
-						'status' => FALSE,
-						'message' => 'Gagal melakukan transaksi, coba beberapa saat lagi...'
-					], REST_Controller::HTTP_OK);
-				}
-			}
-		}
-	}
+	// 				$produk = $this->api->produk_byid(['idProduk' => $v['idProduk']]);
+	// 				$this->api->update_stock(['stokProduk' => $produk['stokProduk']-$v['qty_cart']], ['idProduk' => $v['idProduk']]);
+	// 			}
+	// 			$insert_order_detail = $this->db->insert_batch('order_detail', $order_detail);
+	// 			if ($insert_order_detail) {
+	// 				$this->api->delete_new('order_cart', ['id_plm' => $this->post('id_plm')]);
+	// 				$this->response([
+	// 					'status' => TRUE,
+	// 					'message' => 'Berhasil melakukan transaksi...'
+	// 				], REST_Controller::HTTP_CREATED);
+	// 			}else{
+	// 				$this->response([
+	// 					'status' => FALSE,
+	// 					'message' => 'Gagal melakukan transaksi, coba beberapa saat lagi...'
+	// 				], REST_Controller::HTTP_OK);
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	public function getorder_get()
 	{

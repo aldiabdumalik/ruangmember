@@ -145,23 +145,23 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="<?= base_url('persentasistandar') ?>" class="nav-link <?php if($this->uri->segment(1) == 'persentasistandar') echo "active" ?>">
               <i class="nav-icon fas fa-file-powerpoint"></i>
               <p>
                 Persentasi Standar
               </p>
             </a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <a href="<?= base_url('persentasi') ?>" class="nav-link <?php if($this->uri->segment(1) == 'persentasi') echo "active" ?>">
               <i class="nav-icon fas fa-file-powerpoint"></i>
               <p>
                 Persentasi
               </p>
             </a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <a href="<?= base_url('basicpack') ?>" class="nav-link <?php if($this->uri->segment(1) == 'basicpack') echo "active" ?>">
               <i class="nav-icon fas fa-list-ol"></i>
               <p>
@@ -176,7 +176,7 @@
                 Testimoni
               </p>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="<?= base_url('promosi') ?>" class="nav-link <?php if($this->uri->segment(1) == 'promosi') echo "promosi" ?>">
               <i class="nav-icon fas fa-percentage"></i>
