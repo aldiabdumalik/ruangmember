@@ -87,6 +87,7 @@ $route['api/cart.json'] = 'api/Api_transaksi/cart';
 $route['api/get-consumer.json'] = 'api/Api_transaksi/consumer';
 $route['api/orderkeun.json'] = 'api/Api_transaksi/orderkeun';
 $route['api/in-form-upload.json'] = 'api/Api_transaksi/getorderbyid';
+$route['api/finish.json'] = 'api/Api_transaksi/finish';
 
 $route['api/cartedit.json'] = 'api/android/cartedit';
 $route['api/cartdelete.json'] = 'api/android/cartdelete';

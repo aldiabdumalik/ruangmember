@@ -207,6 +207,14 @@ class Api_transaksi extends REST_Controller {
 		}
 	}
 
+	public function finish_post()
+	{
+		$this->response([
+			'status' => TRUE,
+			'data' => $this->post('picture')
+		], REST_Controller::HTTP_OK);
+	}
+
 	public function buildTree(array $elements, $parentId = 0) {
         $branch = array();
 
