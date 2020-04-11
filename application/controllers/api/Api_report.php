@@ -16,8 +16,8 @@ class Api_report extends REST_Controller {
 
 	public function reporttbl_get()
 	{
-		$result = $this->api->get_report($this->get('page'), array('order_id.order_status' => $this->get('status')));
-		$all = $this->api->get_report_all(array('order_id.order_status' => $this->get('status')));
+		$result = $this->api->get_report($this->get('page'), array('order_id.order_status' => $this->get('status'), 'order_id.id_plm' => $this->get('id')));
+		$all = $this->api->get_report_all(array('order_id.order_status' => $this->get('status'), 'order_id.id_plm' => $this->get('id')));
 		if (!empty($result)) {
 			$this->response([
 				'status' => TRUE,
@@ -34,11 +34,11 @@ class Api_report extends REST_Controller {
 	public function reporttbl2_get()
 	{
 		if (!empty($this->get('text')) && !empty($this->get('date'))) {
-			$result = $this->api->search_report($this->get('text'), $this->get('date'), $this->get('status'));
+			$result = $this->api->search_report($this->get('text'), $this->get('date'), $this->get('status'), $this->get('id'));
 		}elseif (!empty($this->get('text')) && empty($this->get('date'))) {
-			$result = $this->api->search_report($this->get('text'), null, $this->get('status'));
+			$result = $this->api->search_report($this->get('text'), null, $this->get('status'), $this->get('id'));
 		}else{
-			$result = $this->api->search_report(null, $this->get('date'), $this->get('status'));
+			$result = $this->api->search_report(null, $this->get('date'), $this->get('status'), $this->get('id'));
 		}
 		if (!empty($result)) {
 			$this->response([

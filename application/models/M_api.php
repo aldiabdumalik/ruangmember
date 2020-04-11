@@ -276,19 +276,19 @@ class M_api extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-	function search_report($text=null, $date=null, $status)
+	function search_report($text=null, $date=null, $status, $id)
 	{
 		if ($text != null && $date != null) {
 			$where = "
-				order_id.order_status = '${status}' AND order_detail_consumer.nama_penerima LIKE '%${text}%' AND order_id.tgl_order LIKE '%${date}%'
+				order_id.order_status = '${status}' AND order_id.id_plm = '${id}' AND order_detail_consumer.nama_penerima LIKE '%${text}%' AND order_id.tgl_order LIKE '%${date}%'
 			";
 		}elseif ($text != null && $date == null) {
 			$where = "
-				order_id.order_status = '${status}' AND order_detail_consumer.nama_penerima LIKE '%${text}%'
+				order_id.order_status = '${status}' AND order_id.id_plm = '${id}' AND order_detail_consumer.nama_penerima LIKE '%${text}%'
 			";
 		}else{
 			$where = "
-				order_id.order_status = '${status}' AND order_id.tgl_order LIKE '%${date}%'
+				order_id.order_status = '${status}' AND order_id.id_plm = '${id}' AND order_id.tgl_order LIKE '%${date}%'
 			";
 		}
 		$this->db->select('order_id.*, order_detail_consumer.*');
