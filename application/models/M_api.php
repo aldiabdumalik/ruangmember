@@ -311,6 +311,11 @@ class M_api extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+	function pin_order($where)
+	{
+		$query = $this->db->get_where('order_id', $where);
+		return $query->row_array();
+	}
 }
 
 /* End of file M_api.php */
