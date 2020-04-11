@@ -160,6 +160,9 @@ class Api_login extends REST_Controller {
 		curl_close($curl);
 		return $result;
 	}
+
+	public function index_get(){}
+	public function index_post(){}
 }
 
 /* End of file Api_login.php */

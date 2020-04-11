@@ -191,6 +191,22 @@ class Api_transaksi extends REST_Controller {
 		}
 	}
 
+	public function getorderbyid_get()
+	{
+		$result = $this->api->get_report_all(array('order_id.id_order' => $this->get('id')));
+		if (!empty($result)) {
+			$this->response([
+				'status' => TRUE,
+				'data' => $result
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+				'status' => FALSE,
+				'message' => 'Produk ini tidak di temukan'
+			], REST_Controller::HTTP_OK);
+		}
+	}
+
 	public function buildTree(array $elements, $parentId = 0) {
         $branch = array();
 
