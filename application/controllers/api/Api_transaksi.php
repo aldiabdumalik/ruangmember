@@ -209,9 +209,15 @@ class Api_transaksi extends REST_Controller {
 
 	public function finish_post()
 	{
+		// $config['upload_path'] = './assets/img/bukti';
+	 //    $config['allowed_types'] = 'gif|jpg|png|jpeg';
+	 //    $config['encrypt_name'] = FALSE;
+	    
+	 //    $this->upload->initialize($config);
+	    
 		$this->response([
 			'status' => TRUE,
-			'data' => $this->post('picture')
+			'data' => $_FILES['picture']
 		], REST_Controller::HTTP_OK);
 	}
 
