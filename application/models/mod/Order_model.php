@@ -88,6 +88,12 @@ class Order_model extends CI_Model {
         return $this->db->get('order_detail')->result();
     }
 
+    public function get_order_where($where)
+    {
+        $query = $this->db->get_where('order_id', $where);
+        return $query->row_array();
+    }
+
 
 }
 

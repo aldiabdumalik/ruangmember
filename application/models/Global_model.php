@@ -49,6 +49,12 @@ class Global_model extends CI_Model {
 		return $this->db->get('t_marketing_plan')->result();
 	}
 
+	public function update_new($table, $data, $where)
+	{
+		$this->db->update($table, $data, $where);
+		return true;
+	}
+
 }
 
 /* End of file Global_model.php */

@@ -26,8 +26,37 @@ $(document).ready(function() {
 
     $('#datatable-order').on('click','.btn-konfir', function(){
         var idorder = $(this).data('idorder');
-        $('.idorderkonfir').val(idorder);
-        $('#order').html('Konfirmasi orderan ini <span class="idorderkonfir text-danger">'+idorder+'</span>');
+        var status = $(this).data('status');
+        $('#FormConfirm').empty();
+        if (status == 'diproses') {
+          $('#FormConfirm').append(`
+            <div class="form-group">
+              <label for="id_order">ID Order</label>
+              <input type="text" name="id_order" class="form-control" value="${idorder}" readonly>
+            </div>
+            <div class="form-group">
+              <label for="status">Status</label>
+              <input type="text" name="status" class="form-control" value="${status}" readonly>
+            </div>
+            <div class="form-group">
+              <label for="noresi">Nomor Resi</label>
+              <input type="text" name="noresi" class="form-control" placeholder="Masukan nomor resi" required>
+            </div>
+          `);
+        }else{
+          $('#FormConfirm').append(`
+            <div class="form-group">
+              <label for="id_order">ID Order</label>
+              <input type="text" name="id_order" class="form-control" value="${idorder}" readonly>
+            </div>
+            <div class="form-group">
+              <label for="status">Status</label>
+              <input type="text" name="status" class="form-control" value="${status}" readonly>
+            </div>
+          `);
+        }
+        // $('.idorderkonfir').val(idorder);
+        // $('#order').html('Konfirmasi orderan ini <span class="idorderkonfir text-danger">'+idorder+'</span>');
         $('#konfir').modal({
           show:true,
           backdrop: 'static',
@@ -49,7 +78,6 @@ $(document).ready(function() {
           dataType: "JSON",
           success: function(data)
           {
-            console.log(data);
            if(data.status == 'true'){
             $('#idorderview').val(data.dataorder[0]['id_order']);
             $('#namasalesview').val(data.dataorder[0]['nama_sales']);

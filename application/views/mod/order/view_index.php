@@ -33,11 +33,8 @@
         </button>
       </div>
       <div class="modal-body">
-       <?php echo form_open('order/konfir');?>
-          <div class="card-body">
-            <input type="hidden" name="idorderkonfir" class="idorderkonfir">
-              <h6 id="order"></h6>
-          </div>
+      <?php echo form_open('order/konfir');?>
+          <div class="card-body" id="FormConfirm"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>

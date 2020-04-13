@@ -40,9 +40,26 @@ class Order extends CI_Controller {
 				$bukti = '<a href="'.base_url('assets/img/bukti/'.$field->foto_bukti).'" data-toggle="lightbox" data-title="FOTO BUKTI"><img src="'.base_url('assets/img/bukti/'.$field->foto_bukti).'" width="100" height="100" class="img-fluid mb-2" alt="FOTO BUKTI"/></a>';
 			}
 			$row[] = $bukti;
-			$row[] = ($field->order_status == 1 ? '<span class="badge badge-pill badge-success">terkonfir</span>' : '<span class="badge badge-pill badge-danger">belum terkonfir</span>');
-			$row[] = ($field->order_status == 0 ? '<a href="javascript:;" class="btn btn-success btn-sm btn-konfir" data-idorder="'.$field->id_order.'"><i class="fas fa-check-circle"></i></a>':'').' <a href="javascript:;" class="btn btn-info btn-sm btn-lihat" data-idorder="'.base64_encode($field->id_order).'"><i class="fas fa-eye"></i></a>';
-
+			if ($field->order_status == 'menunggu') {
+				$status = '<span class="badge badge-pill badge-info">Menunggu</span>';
+			}elseif ($field->order_status == 'diproses') {
+				$status = '<span class="badge badge-pill badge-danger">Diproses</span>';
+			}elseif ($field->order_status == 'dikirim') {
+				$status = '<span class="badge badge-pill badge-warning">Dikirim</span>';
+			}elseif ($field->order_status == 'selesai') {
+				$status = '<span class="badge badge-pill badge-success">Selesai</span>';
+			}
+			$row[] = $status;
+			if ($field->order_status == 'diproses' || $field->order_status == 'dikirim') {
+				$button = 
+				'<a href="javascript:;" class="btn btn-success btn-sm btn-konfir" data-idorder="'.$field->id_order.'" data-status="'.$field->order_status.'">
+					<i class="fas fa-check-circle"></i>
+				</a>
+				<a href="javascript:;" class="btn btn-info btn-sm btn-lihat" data-idorder="'.base64_encode($field->id_order).'"><i class="fas fa-eye"></i></a>';
+			}else{
+				$button = '<a href="javascript:;" class="btn btn-info btn-sm btn-lihat" data-idorder="'.base64_encode($field->id_order).'"><i class="fas fa-eye"></i></a>';
+			}
+			$row[] = $button;
 			$data[] = $row;
 		}
 
@@ -78,18 +95,33 @@ class Order extends CI_Controller {
 
 	public function konfir()
 	{
-		$id = $this->input->post('idorderkonfir');
-		$this->db->set('order_status', 1);
-	    $this->db->where('id_order', $id);
-	    $success = $this->db->update('order_id');
-
+		if ($this->input->post('status') == 'dikirim') {
+			$order = $this->order->get_order_where(array('id_order' => $this->input->post('id_order')));
+			if ($order['kategori'] == 'retail') {
+				$bonus = array(
+					'id_order' => $this->input->post('id_order'),
+					'bonus' => '60000',
+					'tgl_bonus' => date('Y-m-d')
+				);
+				$this->db->insert('order_bonus', $bonus);
+			}
+			$data = array(
+				'order_status' => 'selesai'
+			);
+		}else{
+			$data = array(
+				'order_status' => 'dikirim',
+				'resi' => $this->input->post('noresi')
+			);
+		}
+	    $success = $this->global->update_new('order_id', $data, array('id_order' => $this->input->post('id_order')));
 	    if ($success) {
 	      echo $this->session->set_flashdata('msg','konfirmasi');
 	      redirect('order');
 	    }else{
 	      echo $this->session->set_flashdata('msg','gagalKonfir');
 	      redirect('order');
-	    } 
+	    }
 	}
 
 	public function simpan()
