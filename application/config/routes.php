@@ -107,3 +107,4 @@ $route['api/get-ongkir.json'] = 'api/Api_ongkir/ongkir';
 $route['api/get-report.json'] = 'api/Api_report/reporttbl';
 $route['api/search-report.json'] = 'api/Api_report/reporttbl2';
 $route['api/detail-report.json'] = 'api/Api_report/orderdetail';
+$route['api/bonusku.json'] = 'api/Api_report/bonus';

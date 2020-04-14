@@ -69,6 +69,27 @@ class Api_report extends REST_Controller {
 		}
 	}
 
+	public function bonus_get()
+	{
+		$where = array(
+			'order_id.id_plm' => $this->get('id'), 
+			'MONTH(order_bonus.tgl_bonus)' => $this->get('bulan'),
+			'DAY(order_bonus.tgl_bonus)' => $this->get('tanggal')
+		);
+		$bonus = $this->api->get_bonus_where($where);
+		if (!empty($bonus)) {
+			$this->response([
+				'status' => TRUE,
+				'data' => $bonus,
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+				'status' => FALSE,
+				'message' => 'Data tidak ditemukan'
+			], REST_Controller::HTTP_OK);
+		}
+	}
+
 	public function index_get(){}
 	public function index_post(){}
 }

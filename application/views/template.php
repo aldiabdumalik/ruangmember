@@ -186,18 +186,18 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?= base_url('sales') ?>" class="nav-link <?php if($this->uri->segment(1) == 'sales') echo "active" ?>">
-              <i class="nav-icon fas fa-users"></i>
+            <a href="<?= base_url('bank') ?>" class="nav-link <?php if($this->uri->segment(1) == 'bank') echo "active" ?>">
+              <i class="nav-icon fas fa-landmark"></i>
               <p>
-                Sales
+                Bank Admin
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?= base_url('bank') ?>" class="nav-link <?php if($this->uri->segment(1) == 'bank') echo "active" ?>">
-              <i class="nav-icon fas fa-landmark"></i>
+            <a href="<?= base_url('sales') ?>" class="nav-link <?php if($this->uri->segment(1) == 'sales') echo "active" ?>">
+              <i class="nav-icon fas fa-users"></i>
               <p>
-                Bank
+                Sales & Bonus
               </p>
             </a>
           </li>

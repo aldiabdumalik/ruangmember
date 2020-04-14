@@ -96,14 +96,19 @@ class Order extends CI_Controller {
 	public function konfir()
 	{
 		if ($this->input->post('status') == 'dikirim') {
-			$order = $this->order->get_order_where(array('id_order' => $this->input->post('id_order')));
-			if ($order['kategori'] == 'retail') {
-				$bonus = array(
-					'id_order' => $this->input->post('id_order'),
-					'bonus' => '60000',
-					'tgl_bonus' => date('Y-m-d')
-				);
-				$this->db->insert('order_bonus', $bonus);
+			$where = array(
+				'order_detail.id_order' => $this->input->post('id_order')
+			);
+			$order = $this->order->get_order_detail_where($where);
+			foreach ($order as $key => $ord) {
+				if ($ord['kategoriProduk'] == 'retail') {
+					$bonus = array(
+						'id_order' => $this->input->post('id_order'),
+						'bonus' => 60000*$ord['qty_detail'],
+						'tgl_bonus' => date('Y-m-d')
+					);
+					$this->db->insert('order_bonus', $bonus);
+				}
 			}
 			$data = array(
 				'order_status' => 'selesai'

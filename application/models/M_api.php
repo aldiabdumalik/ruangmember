@@ -316,6 +316,13 @@ class M_api extends CI_Model {
 		$query = $this->db->get_where('order_id', $where);
 		return $query->row_array();
 	}
+	function get_bonus_where($where)
+	{
+		$this->db->join('order_id', 'order_id.id_order = order_bonus.id_order', 'left');
+		$this->db->where($where);
+		$query = $this->db->get('order_bonus');
+		return $query->result_array();
+	}
 }
 
 /* End of file M_api.php */
