@@ -74,7 +74,7 @@ class Api_report extends REST_Controller {
 		$where = array(
 			'order_id.id_plm' => $this->get('id'), 
 			'MONTH(order_bonus.tgl_bonus)' => $this->get('bulan'),
-			'DAY(order_bonus.tgl_bonus)' => $this->get('tanggal')
+			'YEAR(order_bonus.tgl_bonus)' => $this->get('tahun')
 		);
 		$bonus = $this->api->get_bonus_where($where);
 		if (!empty($bonus)) {
