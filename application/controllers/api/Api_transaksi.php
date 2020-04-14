@@ -258,30 +258,38 @@ class Api_transaksi extends REST_Controller {
 	}
 	public function finish_get()
 	{
-		$cek_pin = $this->api->pin_order(array('order_pin' => $this->get('pin')));
-	    if (empty($cek_pin)) {
-		    $data = array(
-	    		'foto_bukti' => 'cod.jpg',
-	    		'id_bank' => $this->get('bank'),
-	    		'order_status' => 'diproses',
-	    		'order_pin' => $this->get('pin')
-	    	);
-	    	$upload = $this->api->upload_bukti($data, array('id_order' => $this->get('id')));
-	    	if ($upload) {
-				$this->response([
-					'status' => TRUE,
-					'message' => 'Bukti berhasil di kirim'
-				], REST_Controller::HTTP_OK);
-	    	}else{
-	    		$this->response([
+		$pin = $this->api->get_pin(['pin' => $this->post('pin')]);
+	    if (!empty($pin)) {
+			$cek_pin = $this->api->pin_order(array('order_pin' => $this->get('pin')));
+		    if (empty($cek_pin)) {
+			    $data = array(
+		    		'foto_bukti' => 'cod.jpg',
+		    		'id_bank' => $this->get('bank'),
+		    		'order_status' => 'diproses',
+		    		'order_pin' => $this->get('pin')
+		    	);
+		    	$upload = $this->api->upload_bukti($data, array('id_order' => $this->get('id')));
+		    	if ($upload) {
+					$this->response([
+						'status' => TRUE,
+						'message' => 'Bukti berhasil di kirim'
+					], REST_Controller::HTTP_OK);
+		    	}else{
+		    		$this->response([
+						'status' => FALSE,
+						'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
+					], REST_Controller::HTTP_OK);
+		    	}
+		    }else{
+		    	$this->response([
 					'status' => FALSE,
-					'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
+					'message' => 'Bukti gagal di kirim, pin sudah digunakan untuk transaksi'
 				], REST_Controller::HTTP_OK);
-	    	}
+		    }
 	    }else{
 	    	$this->response([
 				'status' => FALSE,
-				'message' => 'Bukti gagal di kirim, pin sudah digunakan untuk transaksi'
+				'message' => 'PIN Salah, Silahkan hubungi admin untuk memnita pin'
 			], REST_Controller::HTTP_OK);
 	    }
 	}
