@@ -128,6 +128,65 @@ class Api_transaksi extends REST_Controller {
 		}
 	}
 
+	public function getCart_get()
+	{
+		$where = array(
+			'order_cart.id_cart' => $this->get('id')
+		);
+		$result = $this->api->cart_get($where);
+		if (!empty($result)) {
+			$this->response([
+				'status' => TRUE,
+				'data' => $result,
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+				'status' => FALSE,
+				'message' => 'Data tidak di temukan'
+			], REST_Controller::HTTP_OK);
+		}
+	}
+	public function deleteCart_post()
+	{
+		$where = array(
+			'order_cart.id_cart' => $this->post('id')
+		);
+		$result = $this->api->delete_new('order_cart', $where);
+		if ($result) {
+			$this->response([
+				'status' => TRUE,
+				'message' => 'Berhasil dihapus',
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+				'status' => FALSE,
+				'message' => 'Gagal menghapus, tunggu beberapa saat lagi'
+			], REST_Controller::HTTP_OK);
+		}
+	}
+	public function editCart_post()
+	{
+		$where = array(
+			'order_cart.id_cart' => $this->post('id')
+		);
+		$data = array(
+			'qty_cart' => $this->post('qty'),
+			'total_cart' => $this->post('total')
+		);
+		$result = $this->api->update_cart($data, $where);
+		if ($result) {
+			$this->response([
+				'status' => TRUE,
+				'message' => 'Berhasil diubah',
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+				'status' => FALSE,
+				'message' => 'Gagal diubah, tunggu beberapa saat lagi'
+			], REST_Controller::HTTP_OK);
+		}
+	}
+
 	public function orderkeun_post()
 	{
 		if ($this->post('consumer') == 0) {

@@ -318,7 +318,7 @@ class M_api extends CI_Model {
 	}
 	function get_bonus_where($where)
 	{
-		$this->db->select('*, sum(order_bonus.bonus) as total_bonus');
+		$this->db->select('*, TRUNCATE((SUM(order_bonus.bonus) - SUM(order_bonus.bonus) * 0.1), 0) as total_bonus');
 		$this->db->join('order_id', 'order_id.id_order = order_bonus.id_order', 'left');
 		$this->db->where($where);
 		$query = $this->db->get('order_bonus');
