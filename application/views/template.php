@@ -201,8 +201,6 @@
               </p>
             </a>
           </li>
-
-          <li class="nav-header">Transaksi</li>
           <li class="nav-item">
             <a href="<?= base_url('pin') ?>" class="nav-link <?php if($this->uri->segment(1) == 'pin') echo "active" ?>">
               <i class="nav-icon fas fa-key"></i>
@@ -211,22 +209,32 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-header">Transaksi</li>
           <li class="nav-item">
-            <a href="<?= base_url('order') ?>" class="nav-link <?php if($this->uri->segment(1) == 'order') echo "active" ?>">
+            <a href="<?= base_url('order') ?>" class="nav-link <?php if($this->uri->segment(1) == 'order' && $this->uri->segment(2) != 'selesai') echo "active" ?>">
               <i class="nav-icon fas fa-shopping-basket"></i>
               <p>
-                Order
+                Belum selesai
               </p>
             </a>
           </li>
-          <!--<li class="nav-item">-->
-          <!--  <a href="<?= base_url('report') ?>" class="nav-link <?php if($this->uri->segment(1) == 'report') echo "active" ?>">-->
-          <!--    <i class="nav-icon fas fa-th"></i>-->
-          <!--    <p>-->
-          <!--      Report-->
-          <!--    </p>-->
-          <!--  </a>-->
-          <!--</li>-->
+          <li class="nav-item">
+            <a href="<?= base_url('order/selesai') ?>" class="nav-link <?php if($this->uri->segment(2) == 'selesai') echo "active" ?>">
+              <i class="nav-icon fas fa-shopping-basket"></i>
+              <p>
+                Selesai
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?= base_url('report') ?>" class="nav-link <?php if($this->uri->segment(1) == 'report') echo "active" ?>">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Report
+              </p>
+            </a>
+          </li>
           
         </ul>
       </nav>

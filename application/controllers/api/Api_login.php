@@ -41,6 +41,8 @@ class Api_login extends REST_Controller {
 		if (empty($this->api->get_sales(['id_plm' => $this->post('register-id')]))) {
 			if (empty($this->api->get_sales(['nowa_sales' => $this->tools->ubah_nohp( $this->post('register-nowa'))]))) {
 				$insert = $this->api->insert('t_sales', $data);
+				$mypin = $this->api->pin_rand();
+				$this->__sendWhatsapText();
 				if ($insert) {
 					$this->response([
 						'status' => TRUE,
@@ -95,7 +97,7 @@ class Api_login extends REST_Controller {
 					array(
 						"Accept: application/json",
 						"Content-Type: application/x-www-form-urlencoded",
-						"Authorization: Bearer x8oDlV5GiIf67imFWXtvY2V62GAEbtolTHsz2gVpdqZp5BW4ua"
+						"Authorization: Bearer 30tt5jXPfsFREjyHrdb6xuLkhlO0cP5xHyHjwb76VDeHwEqKRp"
 					)
 				);
 				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -138,7 +140,7 @@ class Api_login extends REST_Controller {
 		$curl = curl_init();
 		$data = [
 			'receiver' => $nomor,
-			'device' => '089508457647',
+			'device' => '6282113122700',
 			'message' => $pesan,
 			'type' => 'chat'
 		];
@@ -147,7 +149,7 @@ class Api_login extends REST_Controller {
 			array(
 				"Accept: application/json",
 				"Content-Type: application/x-www-form-urlencoded",
-				"Authorization: Bearer x8oDlV5GiIf67imFWXtvY2V62GAEbtolTHsz2gVpdqZp5BW4ua"
+				"Authorization: Bearer 30tt5jXPfsFREjyHrdb6xuLkhlO0cP5xHyHjwb76VDeHwEqKRp"
 			)
 		);
 		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");

@@ -161,7 +161,7 @@ class M_api extends CI_Model {
 
 	function cart_get($where)
 	{
-		$this->db->select('t_produk.namaProduk, t_produk.hargaProduk, order_cart.*');
+		$this->db->select('t_produk.namaProduk, t_produk.hargaProduk, t_produk.stokProduk, order_cart.*');
 		$this->db->join('t_produk', 't_produk.idProduk = order_cart.idProduk', 'left');
 		$query = $this->db->get_where('order_cart', $where);
 		return $query->result_array();
@@ -323,6 +323,15 @@ class M_api extends CI_Model {
 		$this->db->where($where);
 		$query = $this->db->get('order_bonus');
 		return $query->result_array();
+	}
+	function pin_rand()
+	{
+		$this->db->select('pin');
+		$this->db->from('t_pin');
+		$this->db->order_by('rand()');
+		$this->db->limit(1);
+		$query = $this->db->get();
+		return $query->row_array();
 	}
 }
 

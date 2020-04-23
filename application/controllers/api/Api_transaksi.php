@@ -149,7 +149,7 @@ class Api_transaksi extends REST_Controller {
 	public function deleteCart_post()
 	{
 		$where = array(
-			'order_cart.id_cart' => $this->post('id')
+			'id_cart' => $this->post('id')
 		);
 		$result = $this->api->delete_new('order_cart', $where);
 		if ($result) {
@@ -167,7 +167,7 @@ class Api_transaksi extends REST_Controller {
 	public function editCart_post()
 	{
 		$where = array(
-			'order_cart.id_cart' => $this->post('id')
+			'id_cart' => $this->post('id')
 		);
 		$data = array(
 			'qty_cart' => $this->post('qty'),
@@ -272,85 +272,51 @@ class Api_transaksi extends REST_Controller {
 	    $config['allowed_types'] = '*';
 	    $config['encrypt_name'] = TRUE;
 	    $this->upload->initialize($config);
-	    $pin = $this->api->get_pin(['pin' => $this->post('pin')]);
-	    if (!empty($pin)) {
-	    	$cek_pin = $this->api->pin_order(array('order_pin' => $this->post('pin')));
-		    if (empty($cek_pin)) {
-			    if ($this->upload->do_upload('file')) {
-			    	$data = array(
-			    		'foto_bukti' => $this->upload->data('file_name'),
-			    		'id_bank' => $this->post('bank'),
-			    		'order_status' => 'diproses',
-			    		'order_pin' => $this->post('pin')
-			    	);
-			    	$upload = $this->api->upload_bukti($data, array('id_order' => $this->post('id')));
-			    	if ($upload) {
-						$this->response([
-							'status' => TRUE,
-							'foto' => $this->upload->data('file_name'),
-							'message' => 'Bukti berhasil di kirim'
-						], REST_Controller::HTTP_OK);
-			    	}else{
-			    		$this->response([
-							'status' => FALSE,
-							'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
-						], REST_Controller::HTTP_OK);
-			    	}
-			    }else{
-			    	$this->response([
-						'status' => FALSE,
-						'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
-					], REST_Controller::HTTP_OK);
-			    }
-		    }else{
-		    	$this->response([
-					'status' => FALSE,
-					'message' => 'Bukti gagal di kirim, pin sudah digunakan untuk transaksi'
+	    if ($this->upload->do_upload('file')) {
+	    	$data = array(
+	    		'foto_bukti' => $this->upload->data('file_name'),
+	    		'id_bank' => $this->post('bank'),
+	    		'order_status' => 'diproses'
+	    	);
+	    	$upload = $this->api->upload_bukti($data, array('id_order' => $this->post('id')));
+	    	if ($upload) {
+				$this->response([
+					'status' => TRUE,
+					'foto' => $this->upload->data('file_name'),
+					'message' => 'Bukti berhasil di kirim'
 				], REST_Controller::HTTP_OK);
-		    }
+	    	}else{
+	    		$this->response([
+					'status' => FALSE,
+					'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
+				], REST_Controller::HTTP_OK);
+	    	}
 	    }else{
 	    	$this->response([
 				'status' => FALSE,
-				'message' => 'PIN Salah, Silahkan hubungi admin untuk memnita pin'
+				'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
 			], REST_Controller::HTTP_OK);
 	    }
 	}
 	public function finish_get()
 	{
-		$pin = $this->api->get_pin(['pin' => $this->post('pin')]);
-	    if (!empty($pin)) {
-			$cek_pin = $this->api->pin_order(array('order_pin' => $this->get('pin')));
-		    if (empty($cek_pin)) {
-			    $data = array(
-		    		'foto_bukti' => 'cod.jpg',
-		    		'id_bank' => $this->get('bank'),
-		    		'order_status' => 'diproses',
-		    		'order_pin' => $this->get('pin')
-		    	);
-		    	$upload = $this->api->upload_bukti($data, array('id_order' => $this->get('id')));
-		    	if ($upload) {
-					$this->response([
-						'status' => TRUE,
-						'message' => 'Bukti berhasil di kirim'
-					], REST_Controller::HTTP_OK);
-		    	}else{
-		    		$this->response([
-						'status' => FALSE,
-						'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
-					], REST_Controller::HTTP_OK);
-		    	}
-		    }else{
-		    	$this->response([
-					'status' => FALSE,
-					'message' => 'Bukti gagal di kirim, pin sudah digunakan untuk transaksi'
-				], REST_Controller::HTTP_OK);
-		    }
-	    }else{
-	    	$this->response([
-				'status' => FALSE,
-				'message' => 'PIN Salah, Silahkan hubungi admin untuk memnita pin'
+		$data = array(
+    		'foto_bukti' => 'cod.jpg',
+    		'id_bank' => $this->get('bank'),
+    		'order_status' => 'diproses'
+    	);
+    	$upload = $this->api->upload_bukti($data, array('id_order' => $this->get('id')));
+    	if ($upload) {
+			$this->response([
+				'status' => TRUE,
+				'message' => 'Bukti berhasil di kirim'
 			], REST_Controller::HTTP_OK);
-	    }
+    	}else{
+    		$this->response([
+				'status' => FALSE,
+				'message' => 'Bukti gagal di kirim, silahkan ulangi beberapa saat lagi'
+			], REST_Controller::HTTP_OK);
+    	}
 	}
 
 	public function buildTree(array $elements, $parentId = 0) {

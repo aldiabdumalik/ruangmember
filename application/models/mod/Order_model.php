@@ -6,7 +6,7 @@ class Order_model extends CI_Model {
 	var $table = 'order_id'; //nama tabel dari database
     var $column_order = array(null,'order_id.id_order','nama_sales','total_order','tgl_order','foto_bukti','order_status','id_bank'); //field yang ada di table user
     var $column_search = array('order_id.id_order','nama_sales','total_order','tgl_order','foto_bukti','order_status'); //field yang diizin untuk pencarian 
-    var $order = array('order_id.id_order' => 'desc'); // default order 
+    var $order = array('order_id.tgl_order' => 'asc'); // default order 
 
 	public function __construct()
 	{
@@ -16,9 +16,9 @@ class Order_model extends CI_Model {
 	private function _get_datatables_query()
     {
      	$this->db->select('*');
+        $this->db->from($this->table);
         $this->db->join('t_sales', 't_sales.id_plm = order_id.id_plm', 'left');
         $this->db->join('order_detail_consumer', 'order_detail_consumer.id_consumer = order_id.id_consumer', 'left');
-        $this->db->from($this->table);
  
         $i = 0;
      
@@ -54,11 +54,18 @@ class Order_model extends CI_Model {
         }
     }
  
-    function get_datatables()
+    function get_datatables($status)
     {
+        if ($status=="selesai") {
+            $where = "order_id.order_status = 'selesai' ";
+        }else{
+             $where = "order_id.order_status != 'selesai' ";
+        }
         $this->_get_datatables_query();
-        if($_POST['length'] != -1)
-        $this->db->limit($_POST['length'], $_POST['start']);
+        if($_POST['length'] != -1){
+            $this->db->limit($_POST['length'], $_POST['start']);
+        }
+        $this->db->where($where);
         $query = $this->db->get();
         return $query->result();
     }

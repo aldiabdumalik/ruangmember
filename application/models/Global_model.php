@@ -55,6 +55,13 @@ class Global_model extends CI_Model {
 		return true;
 	}
 
+	public function get_admin($where)
+	{
+		return
+			$this->db->get_where('t_user', $where)
+			->row();
+	}
+
 }
 
 /* End of file Global_model.php */
