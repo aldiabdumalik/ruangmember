@@ -45,7 +45,6 @@ class Report extends CI_Controller {
 			$title = "Report Transaksi Perbulan ${bln} tahun ${tahun}";
 		}
 		$result = $this->report->get_report($where);
-		print_r($result);
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setCellValue('A1', $title);

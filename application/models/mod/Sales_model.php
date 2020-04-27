@@ -74,6 +74,34 @@ class Sales_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
+
+    public function get_sales_with_bank($where)
+    {
+        $this->db->join('t_sales_bank', 't_sales_bank.id_plm = t_sales.id_plm', 'left');
+        $this->db->where($where);
+        $query = $this->db->get('t_sales');
+        return $query->row_array();
+    }
+
+    function get_bonus_where($where)
+    {
+        $this->db->select('order_bonus.*, order_id.*, SUM(order_bonus.bonus) AS komisi');
+        $this->db->from('order_bonus');
+        $this->db->join('order_id', 'order_id.id_order = order_bonus.id_order', 'left');
+        $this->db->where($where);
+        $this->db->group_by('order_id.id_order');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    function get_bonus_where_total($where)
+    {
+        $this->db->select('TRUNCATE((SUM(bonus) - SUM(bonus) * 0.1), 0) as total_bonus');
+        $this->db->from('order_bonus');
+        $this->db->where($where);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
 }
 
 /* End of file Produk_model.php */

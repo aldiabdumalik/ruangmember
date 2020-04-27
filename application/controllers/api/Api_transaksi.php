@@ -17,7 +17,7 @@ class Api_transaksi extends REST_Controller {
 	public function consumer_get()
 	{
 		if ($this->get('consumer') == NULL) {
-			$result = $this->api->get_consumer();
+			$result = $this->api->get_consumer_new(array('id_plm' => $this->get('id_plm')));
 		}else{
 			$where = array(
 				'id_consumer' => $this->get('consumer')
@@ -28,6 +28,10 @@ class Api_transaksi extends REST_Controller {
 			$this->response([
 				'status' => TRUE,
 				'data' => $result
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+				'status' => FALSE
 			], REST_Controller::HTTP_OK);
 		}
 	}
@@ -192,6 +196,7 @@ class Api_transaksi extends REST_Controller {
 		if ($this->post('consumer') == 0) {
 			$consumer = array(
 				'id_consumer' => date('Ymd').$this->tools->str_random(4),
+				'id_plm' => $this->post('id_plm'),
 				'nama_penerima' => $this->post('nama'),
 				'alamat_penerima' => $this->post('alamat'),
 				'nowa_penerima' => $this->tools->ubah_nohp($this->post('nowa')),

@@ -167,6 +167,7 @@ class Order extends CI_Controller {
 				if ($ord['kategoriProduk'] == 'retail') {
 					$bonus = array(
 						'id_order' => $this->input->post('id_order'),
+						'id_plm' => $ord['id_plm'],
 						'bonus' => 60000*$ord['qty_detail'],
 						'tgl_bonus' => date('Y-m-d')
 					);

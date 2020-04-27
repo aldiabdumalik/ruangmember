@@ -30,7 +30,7 @@ class Sales extends CI_Controller {
 			$row[] = $field->nama_sales;
 			$row[] = $field->nowa_sales;
 			$row[] = ($field->status_sales == 1 ? '<span class="badge badge-b badge-pill badge-success">Aktif</span>' : '<span class="badge badge-b badge-pill badge-danger">Tidak aktif</span>');
-			$row[] = '<a href="javascript:;" class="btn btn-success btn-sm btn-sales" data-idsales="'.$field->id_plm.'"><i class="fas fa-key"></i></a> <a href="javascript:;" class="btn btn-danger btn-sm btn-hapus" data-idsales="'.$field->id_plm.'" data-namasales="'.$field->nama_sales.'"><i class="fas fa-trash"></i></a>';
+			$row[] = '<a href="javascript:;" class="btn btn-info btn-sm btn-bonus" data-idsales="'.$field->id_plm.'"><i class="fas fa-eye"></i></a> <a href="javascript:;" class="btn btn-success btn-sm btn-sales" data-idsales="'.$field->id_plm.'"><i class="fas fa-key"></i></a> <a href="javascript:;" class="btn btn-danger btn-sm btn-hapus" data-idsales="'.$field->id_plm.'" data-namasales="'.$field->nama_sales.'"><i class="fas fa-trash"></i></a>';
 
 			$data[] = $row;
 		}
@@ -90,5 +90,60 @@ class Sales extends CI_Controller {
 			echo $this->session->set_flashdata('msg', 'gagalDihapus');
 			redirect('sales');
 		}
+	}
+
+	public function detail()
+	{
+		$data['admin'] = $this->db->get_where('t_user', ['id_user' => $this->session->userdata('id_user')])->row();
+		$data['title']  = 'Sales';
+	    $data['js']   = 'sales';
+	    $data['sales'] = $this->sales->get_sales_with_bank(array('t_sales.id_plm' => $this->input->get('sales')));
+	    $this->template->load('template', 'mod/sales/view_detail', $data);
+	}
+
+	public function get_bonus()
+	{
+		$where = array(
+			'order_bonus.id_plm' => $this->input->get('id'), 
+			'MONTH(order_bonus.tgl_bonus)' => $this->input->get('bulan'),
+			'YEAR(order_bonus.tgl_bonus)' => $this->input->get('tahun')
+		);
+		$where_belom = array(
+			'order_bonus.id_plm' => $this->input->get('id'), 
+			'MONTH(order_bonus.tgl_bonus)' => $this->input->get('bulan'),
+			'YEAR(order_bonus.tgl_bonus)' => $this->input->get('tahun'),
+			'order_bonus.status_bonus' => 0
+		);
+		$where_udah = array(
+			'order_bonus.id_plm' => $this->input->get('id'), 
+			'MONTH(order_bonus.tgl_bonus)' => $this->input->get('bulan'),
+			'YEAR(order_bonus.tgl_bonus)' => $this->input->get('tahun'),
+			'order_bonus.status_bonus' => 1
+		);
+		$bonus = $this->sales->get_bonus_where($where);
+		$total_belom = $this->sales->get_bonus_where_total($where_belom);
+		$total_udah = $this->sales->get_bonus_where_total($where_udah);
+		if (!empty($bonus)) {
+			$result = array(
+				'request' => 'true',
+				'data' => $bonus,
+				'total_belom' => $total_belom,
+				'total_udah' => $total_udah
+			);
+		}else{
+			$result = array(
+				'request' => 'false'
+			);
+		}
+		echo json_encode($result);exit();
+	}
+
+	public function update_status()
+	{
+		$this->db->update('order_bonus', array('status_bonus' => 1), array('id_plm' => $this->input->post('id_plm')));
+		$result = array(
+			'status' => 'true'
+		);
+		echo json_encode($result);exit();
 	}
 }

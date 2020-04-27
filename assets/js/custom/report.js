@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$('#per').change(function () {
 		if ($('#per').val() == 1) {
 			$('#v-bln').removeClass('collapse');
-			$('#v-thn').addClass('collapse');
+			$('#v-thn').removeClass('collapse');
 		}else{
 			$('#v-thn').removeClass('collapse');
 			$('#v-bln').addClass('collapse');

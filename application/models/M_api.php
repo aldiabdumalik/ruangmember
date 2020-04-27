@@ -252,6 +252,11 @@ class M_api extends CI_Model {
 			return $query->result_array();
 		}
 	}
+	function get_consumer_new($where)
+	{
+		$query = $this->db->get_where('order_detail_consumer', $where);
+		return $query->result_array();
+	}
 
 	function get_report($page=0, $where=null)
 	{
@@ -318,11 +323,21 @@ class M_api extends CI_Model {
 	}
 	function get_bonus_where($where)
 	{
-		$this->db->select('*, TRUNCATE((SUM(order_bonus.bonus) - SUM(order_bonus.bonus) * 0.1), 0) as total_bonus');
+		$this->db->select('order_bonus.*, order_id.*, SUM(order_bonus.bonus) AS komisi');
+		$this->db->from('order_bonus');
 		$this->db->join('order_id', 'order_id.id_order = order_bonus.id_order', 'left');
 		$this->db->where($where);
-		$query = $this->db->get('order_bonus');
+		$this->db->group_by('order_id.id_order');
+		$query = $this->db->get();
 		return $query->result_array();
+	}
+	function get_bonus_where_total($where)
+	{
+		$this->db->select('TRUNCATE((SUM(bonus) - SUM(bonus) * 0.1), 0) as total_bonus');
+		$this->db->from('order_bonus');
+		$this->db->where($where);
+		$query = $this->db->get();
+		return $query->row_array();
 	}
 	function pin_rand()
 	{

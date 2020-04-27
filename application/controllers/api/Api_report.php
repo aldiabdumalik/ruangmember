@@ -71,16 +71,27 @@ class Api_report extends REST_Controller {
 
 	public function bonus_get()
 	{
-		$where = array(
-			'order_id.id_plm' => $this->get('id'), 
-			'MONTH(order_bonus.tgl_bonus)' => $this->get('bulan'),
-			'YEAR(order_bonus.tgl_bonus)' => $this->get('tahun')
-		);
+		if ($this->get('status') != '3') {
+			$where = array(
+				'order_bonus.id_plm' => $this->get('id'), 
+				'MONTH(order_bonus.tgl_bonus)' => $this->get('bulan'),
+				'YEAR(order_bonus.tgl_bonus)' => $this->get('tahun'),
+				'order_bonus.status_bonus' => $this->get('status')
+			);
+		}else{
+			$where = array(
+				'order_bonus.id_plm' => $this->get('id'), 
+				'MONTH(order_bonus.tgl_bonus)' => $this->get('bulan'),
+				'YEAR(order_bonus.tgl_bonus)' => $this->get('tahun')
+			);
+		}
 		$bonus = $this->api->get_bonus_where($where);
+		$total = $this->api->get_bonus_where_total($where);
 		if (!empty($bonus)) {
 			$this->response([
 				'status' => TRUE,
 				'data' => $bonus,
+				'total' => $total
 			], REST_Controller::HTTP_OK);
 		}else{
 			$this->response([
